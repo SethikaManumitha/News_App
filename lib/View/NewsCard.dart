@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../Model/News.dart';
+import '../Controller/NewsController.dart';
 import 'ViewNewsScreen.dart';
 
 class NewsCard extends StatefulWidget {
@@ -22,12 +24,29 @@ class NewsCard extends StatefulWidget {
 }
 
 class _NewsCardState extends State<NewsCard> {
+  final NewsController newsController = NewsController();
   bool isBookmarked = false;
 
-  void toggleBookmark() {
+  void toggleBookmark() async {
     setState(() {
       isBookmarked = !isBookmarked;
     });
+
+    if (isBookmarked) {
+
+      News news = News(
+        id: widget.id,
+        title: widget.title,
+        body: widget.body,
+        date: widget.date,
+        imageUrl: widget.imageUrl,
+      );
+
+      await newsController.insertNote(news);
+
+      // Print the news in the console
+      print('Bookmarked News: ${news.toMap()}');
+    }
   }
 
   @override
