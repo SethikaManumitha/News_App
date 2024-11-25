@@ -7,4 +7,12 @@ class NewsController {
   Future<void> insertNote(News news) async {
     await databaseHandler.insertNews(news);
   }
+
+  Future<void> removeNews(int id) async {
+    await databaseHandler.deleteNews(id);
+  }
+
+  Future<List<News>> retrieveNews() async {
+    return await databaseHandler.retrieveNews();
+  }
 }

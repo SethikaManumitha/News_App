@@ -26,7 +26,7 @@ class DatabaseHandler {
     return await db.insert('news', news.toMap());
   }
 
-  // Fetch all News records
+
   Future<List<News>> retrieveNews() async {
     final Database db = await initializeDB();
     final List<Map<String, dynamic>> queryResult = await db.query('news');

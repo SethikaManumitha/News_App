@@ -27,13 +27,28 @@ class _NewsCardState extends State<NewsCard> {
   final NewsController newsController = NewsController();
   bool isBookmarked = false;
 
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfBookmarked();
+  }
+
+
+  void checkIfBookmarked() async {
+    List<News> bookmarkedNews = await newsController.retrieveNews();
+    setState(() {
+      isBookmarked = bookmarkedNews.any((news) => news.id == widget.id);
+    });
+  }
+
+
   void toggleBookmark() async {
     setState(() {
       isBookmarked = !isBookmarked;
     });
 
     if (isBookmarked) {
-
       News news = News(
         id: widget.id,
         title: widget.title,
@@ -41,11 +56,11 @@ class _NewsCardState extends State<NewsCard> {
         date: widget.date,
         imageUrl: widget.imageUrl,
       );
-
       await newsController.insertNote(news);
-
-      // Print the news in the console
       print('Bookmarked News: ${news.toMap()}');
+    } else {
+      await newsController.removeNews(widget.id);
+      print('Removed Bookmarked News: ${widget.id}');
     }
   }
 
