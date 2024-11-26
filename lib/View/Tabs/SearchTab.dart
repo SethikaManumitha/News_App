@@ -18,6 +18,7 @@ class _SearchTabState extends State<SearchTab> {
 
   // list of categories
   final List<String> categories = [
+    "General",
     "Business",
     "Entertainment",
     "Health",
