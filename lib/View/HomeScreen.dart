@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const HomeTab(),
     const SearchTab(),
     const BookMarkTab(),
-    const SettingTab()
+    const SettingTab(),
   ];
 
   void _onItemTapped(int index) {
@@ -32,13 +32,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void _toggleSearchBar() {
     setState(() {
       _isSearchVisible = !_isSearchVisible;
-      if (!_isSearchVisible) _searchController.clear();
+      if (!_isSearchVisible) {
+        _searchController.clear();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Check the current theme mode
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -47,7 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ? TextField(
           controller: _searchController,
           onChanged: (value) {
-            // Handle search query changes
+            setState(() {
+              _screens[1] = SearchTab(query: value);
+            });
           },
           autofocus: true,
           decoration: InputDecoration(
@@ -69,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: _screens[_currentIndex],
+      body: _isSearchVisible ? _screens[1] : _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.orange,
         unselectedItemColor: isDarkMode ? Colors.white : Colors.black54,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../Model/News.dart';
+import '../Controller/NewsController.dart';
 
 class ViewNewsScreen extends StatefulWidget {
   final int id;
@@ -21,7 +23,40 @@ class ViewNewsScreen extends StatefulWidget {
 }
 
 class _ViewNewsScreenState extends State<ViewNewsScreen> {
-  bool isIconPressed = false;
+  final NewsController newsController = NewsController();
+  bool isBookmarked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfBookmarked();
+  }
+
+  void checkIfBookmarked() async {
+    List<News> bookmarkedNews = await newsController.retrieveNews();
+    setState(() {
+      isBookmarked = bookmarkedNews.any((news) => news.id == widget.id);
+    });
+  }
+
+  void toggleBookmark() async {
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    if (isBookmarked) {
+      News news = News(
+        id: widget.id,
+        title: widget.title,
+        body: widget.body,
+        date: widget.date,
+        imageUrl: widget.imageUrl,
+      );
+      await newsController.insertNote(news);
+    } else {
+      await newsController.removeNews(widget.id);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +68,11 @@ class _ViewNewsScreenState extends State<ViewNewsScreen> {
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(isIconPressed ? Icons.bookmark : Icons.bookmark_outline),
-            color: Colors.white,
-            onPressed: () {
-              setState(() {
-                isIconPressed = !isIconPressed;
-              });
-            },
+            icon: Icon(
+              isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+              color: Colors.white,
+            ),
+            onPressed: toggleBookmark,
           )
         ],
       ),
@@ -80,7 +113,6 @@ class _ViewNewsScreenState extends State<ViewNewsScreen> {
               ],
             ),
             const SizedBox(height: 15),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Row(

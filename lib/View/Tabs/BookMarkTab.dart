@@ -31,9 +31,6 @@ class _BookMarkTabState extends State<BookMarkTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bookmarks'),
-      ),
       body: FutureBuilder<List<News>>(
         future: _newsList,
         builder: (context, snapshot) {

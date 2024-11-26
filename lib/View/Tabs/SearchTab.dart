@@ -3,7 +3,9 @@ import '../../Services/ApiService.dart';
 import '../NewsCard.dart';
 
 class SearchTab extends StatefulWidget {
-  const SearchTab({super.key});
+  final String query;
+
+  const SearchTab({super.key, this.query = ""});
 
   @override
   State<SearchTab> createState() => _SearchTabState();
@@ -12,18 +14,24 @@ class SearchTab extends StatefulWidget {
 class _SearchTabState extends State<SearchTab> {
   List<dynamic> articles = [];
   bool isLoading = false;
-
   final ApiService _apiService = ApiService();
 
-  // Fetch news data based on category
-  Future<void> fetchNewsData(String category) async {
+  @override
+  void didUpdateWidget(SearchTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.query != oldWidget.query) {
+      fetchNewsByQuery(widget.query);
+    }
+  }
+
+  Future<void> fetchNewsByQuery(String query) async {
     setState(() {
       isLoading = true;
     });
 
-    List<dynamic> fetchedArticles = [];
+    List<dynamic> searchedArticles = [];
 
-    if (category.isEmpty) {
+    if (query.isEmpty) {
       setState(() {
         articles = [];
         isLoading = false;
@@ -31,16 +39,10 @@ class _SearchTabState extends State<SearchTab> {
       return;
     }
 
-    if (["business", "entertainment", "general", "health", "science", "sports", "technology"]
-        .contains(category)) {
-      fetchedArticles = await _apiService.fetchNewsByCategory(category);
-    } else {
-      // Fetch by default category if no matching category
-      fetchedArticles = await _apiService.fetchNewsByCategory("general");
-    }
+    searchedArticles = await _apiService.fetchNewsByQuery(query);
 
     setState(() {
-      articles = fetchedArticles;
+      articles = searchedArticles;
       isLoading = false;
     });
   }
@@ -50,51 +52,6 @@ class _SearchTabState extends State<SearchTab> {
     return Scaffold(
       body: Column(
         children: [
-          // Buttons to fetch articles by category
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () => fetchNewsData("business"),
-                  child: const Text("Business"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => fetchNewsData("entertainment"),
-                  child: const Text("Entertainment"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => fetchNewsData("general"),
-                  child: const Text("General"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => fetchNewsData("health"),
-                  child: const Text("Health"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => fetchNewsData("science"),
-                  child: const Text("Science"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => fetchNewsData("sports"),
-                  child: const Text("Sports"),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => fetchNewsData("technology"),
-                  child: const Text("Technology"),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Display loading indicator or articles
           Expanded(
             child: Builder(
               builder: (context) {

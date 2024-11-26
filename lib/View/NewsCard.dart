@@ -57,10 +57,8 @@ class _NewsCardState extends State<NewsCard> {
         imageUrl: widget.imageUrl,
       );
       await newsController.insertNote(news);
-      print('Bookmarked News: ${news.toMap()}');
     } else {
       await newsController.removeNews(widget.id);
-      print('Removed Bookmarked News: ${widget.id}');
     }
   }
 

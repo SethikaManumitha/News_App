@@ -15,9 +15,6 @@ class _SettingTabState extends State<SettingTab> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
       body: Column(
         children: [
           ListTile(
