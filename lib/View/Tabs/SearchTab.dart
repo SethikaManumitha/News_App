@@ -16,6 +16,18 @@ class _SearchTabState extends State<SearchTab> {
   bool isLoading = false;
   final ApiService _apiService = ApiService();
 
+  // list of categories
+  final List<String> categories = [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Science",
+    "Sports",
+    "Technology"
+  ];
+
+  String selectedCategory = "";
+
   @override
   void didUpdateWidget(SearchTab oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -27,9 +39,8 @@ class _SearchTabState extends State<SearchTab> {
   Future<void> fetchNewsByQuery(String query) async {
     setState(() {
       isLoading = true;
+      selectedCategory = "";
     });
-
-    List<dynamic> searchedArticles = [];
 
     if (query.isEmpty) {
       setState(() {
@@ -39,10 +50,24 @@ class _SearchTabState extends State<SearchTab> {
       return;
     }
 
-    searchedArticles = await _apiService.fetchNewsByQuery(query);
+    final searchedArticles = await _apiService.fetchNewsByQuery(query);
 
     setState(() {
       articles = searchedArticles;
+      isLoading = false;
+    });
+  }
+
+  Future<void> fetchNewsByCategory(String category) async {
+    setState(() {
+      isLoading = true;
+      selectedCategory = category;
+    });
+
+    final categoryArticles = await _apiService.fetchNewsByCategory(category.toLowerCase());
+
+    setState(() {
+      articles = categoryArticles;
       isLoading = false;
     });
   }
@@ -52,6 +77,25 @@ class _SearchTabState extends State<SearchTab> {
     return Scaffold(
       body: Column(
         children: [
+          // Category buttons
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: categories.map((category) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: ElevatedButton(
+                      onPressed: () => fetchNewsByCategory(category),
+                      child: Text(category),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+
           Expanded(
             child: Builder(
               builder: (context) {
