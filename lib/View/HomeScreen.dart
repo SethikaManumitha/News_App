@@ -44,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: _isSearchVisible
-            ? TextField(
+        title: _isSearchVisible ?
+        TextField(
           controller: _searchController,
           onChanged: (value) {
             setState(() {

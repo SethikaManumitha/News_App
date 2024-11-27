@@ -16,7 +16,7 @@ class _SearchTabState extends State<SearchTab> {
   bool isLoading = false;
   final ApiService _apiService = ApiService();
 
-  // list of categories
+  // List of categories
   final List<String> categories = [
     "General",
     "Business",
@@ -85,11 +85,22 @@ class _SearchTabState extends State<SearchTab> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: categories.map((category) {
+                  final isSelected = category == selectedCategory;
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: ElevatedButton(
                       onPressed: () => fetchNewsByCategory(category),
-                      child: Text(category),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isSelected
+                            ? Colors.orange
+                            : Colors.white,
+                      ),
+                      child: Text(
+                        category,
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                        ),
+                      ),
                     ),
                   );
                 }).toList(),
