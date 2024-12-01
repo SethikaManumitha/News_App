@@ -4,7 +4,7 @@ import '../Database/DatabaseHandler.dart';
 class NewsController {
   final DatabaseHandler databaseHandler = DatabaseHandler();
 
-  Future<void> insertNote(News news) async {
+  Future<void> insertNews(News news) async {
     await databaseHandler.insertNews(news);
   }
 

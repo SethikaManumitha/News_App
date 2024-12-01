@@ -33,7 +33,6 @@ class DatabaseHandler {
     return queryResult.map((e) => News.fromMap(e)).toList();
   }
 
-  // Delete a News record by ID
   Future<void> deleteNews(int id) async {
     final db = await initializeDB();
     await db.delete(

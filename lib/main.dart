@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'News App',
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      themeMode: themeProvider.themeMode, // Use ThemeMode from ThemeProvider
+      themeMode: themeProvider.themeMode,
       home: const HomeScreen(),
     );
   }

@@ -52,7 +52,7 @@ class _ViewNewsScreenState extends State<ViewNewsScreen> {
         date: widget.date,
         imageUrl: widget.imageUrl,
       );
-      await newsController.insertNote(news);
+      await newsController.insertNews(news);
     } else {
       await newsController.removeNews(widget.id);
     }

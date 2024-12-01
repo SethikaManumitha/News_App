@@ -41,7 +41,7 @@ class _BookMarkTabState extends State<BookMarkTab> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No Bookmarked News'));
           } else {
-            // Display news in a list
+            // display news in a list
             List<News> newsList = snapshot.data!;
 
             return ListView.builder(
