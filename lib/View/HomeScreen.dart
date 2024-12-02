@@ -44,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: _isSearchVisible ?
-        TextField(
+        title: _isSearchVisible
+            ? TextField(
           controller: _searchController,
           onChanged: (value) {
             setState(() {
@@ -66,10 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
         )
             : const Text("News App"),
         actions: [
-          IconButton(
-            icon: Icon(_isSearchVisible ? Icons.close : Icons.search),
-            onPressed: _toggleSearchBar,
-          ),
+          if (!_isSearchVisible)
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: _toggleSearchBar,
+            ),
+          if (_isSearchVisible)
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: _toggleSearchBar,
+            ),
         ],
       ),
       body: _isSearchVisible ? _screens[1] : _screens[_currentIndex],
