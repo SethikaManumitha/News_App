@@ -72,13 +72,14 @@ class _HomeTabState extends State<HomeTab> {
                 final title = article['title'] ?? 'No title';
                 final description = article['description'] ?? 'No description';
                 final date = article['publishedAt'] ?? 'No date';
+                final id = 'top_${topArticles.indexOf(article)}';
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ViewNewsScreen(
-                          id: topArticles.indexOf(article),
+                          id: id,
                           title: title,
                           body: description,
                           date: date,
@@ -154,8 +155,9 @@ class _HomeTabState extends State<HomeTab> {
                     itemBuilder: (context, index) {
                       final article = latestArticles[index];
                       final formattedDate = formatDate(article['publishedAt'] ?? '');
+                      final id = 'latest_$index';
                       return NewsCard(
-                        id: index,
+                        id: id,
                         title: article['title'] ?? 'No title',
                         body: article['description'] ?? 'No description',
                         date: formattedDate,
@@ -171,4 +173,5 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
+
 }

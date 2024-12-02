@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../Services/ApiService.dart';
 import '../NewsCard.dart';
+import '../../Model/News.dart';
 
 class SearchTab extends StatefulWidget {
   final String query;
@@ -12,11 +14,10 @@ class SearchTab extends StatefulWidget {
 }
 
 class _SearchTabState extends State<SearchTab> {
-  List<dynamic> articles = [];
+  List<News> articles = [];
   bool isLoading = false;
   final ApiService _apiService = ApiService();
 
-  // List of categories
   final List<String> categories = [
     "General",
     "Business",
@@ -54,7 +55,17 @@ class _SearchTabState extends State<SearchTab> {
     final searchedArticles = await _apiService.fetchNewsByQuery(query);
 
     setState(() {
-      articles = searchedArticles;
+      articles = searchedArticles
+          .asMap()
+          .entries
+          .map((entry) => News(
+        id: 'search${entry.key}',
+        title: entry.value['title'] ?? 'No title',
+        body: entry.value['description'] ?? 'No description',
+        date: formatDate(entry.value['publishedAt']),
+        imageUrl: entry.value['urlToImage'] ?? '',
+      ))
+          .toList();
       isLoading = false;
     });
   }
@@ -72,6 +83,17 @@ class _SearchTabState extends State<SearchTab> {
       isLoading = false;
     });
   }
+
+  String formatDate(String dateString) {
+    try {
+      DateTime dateTime = DateTime.parse(dateString).toLocal();
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+    } catch (e) {
+      return 'Invalid date';
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +113,7 @@ class _SearchTabState extends State<SearchTab> {
                     child: ElevatedButton(
                       onPressed: () => fetchNewsByCategory(category),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isSelected
-                            ? Colors.orange
-                            : Colors.white,
+                        backgroundColor: isSelected ? Colors.orange : Colors.white,
                       ),
                       child: Text(
                         category,
@@ -108,29 +128,30 @@ class _SearchTabState extends State<SearchTab> {
             ),
           ),
 
+          // Article list
           Expanded(
             child: Builder(
               builder: (context) {
                 if (isLoading) {
                   return const Center(child: CircularProgressIndicator());
+                } else if (articles.isEmpty) {
+                  return const Center(child: Text("No articles found"));
                 } else {
-                  if (articles.isEmpty) {
-                    return const Center(child: Text("No articles found"));
-                  } else {
-                    return ListView.builder(
-                      itemCount: articles.length,
-                      itemBuilder: (context, index) {
-                        final article = articles[index];
-                        return NewsCard(
-                          id: index,
-                          title: article['title'] ?? 'No title',
-                          body: article['description'] ?? 'No description',
-                          date: article['publishedAt'] ?? 'No date',
-                          imageUrl: article['urlToImage'] ?? 'https://via.placeholder.com/100',
-                        );
-                      },
-                    );
-                  }
+                  return ListView.builder(
+                    itemCount: articles.length,
+                    itemBuilder: (context, index) {
+                      final News article = articles[index];
+                      return NewsCard(
+                        id: article.id,
+                        title: article.title,
+                        body: article.body,
+                        date: article.date,
+                        imageUrl: article.imageUrl.isNotEmpty
+                            ? article.imageUrl
+                            : 'https://via.placeholder.com/100',
+                      );
+                    },
+                  );
                 }
               },
             ),

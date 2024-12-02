@@ -4,7 +4,7 @@ import '../Controller/NewsController.dart';
 import 'ViewNewsScreen.dart';
 
 class NewsCard extends StatefulWidget {
-  final int id;
+  final String id;
   final String title;
   final String body;
   final String date;

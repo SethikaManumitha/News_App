@@ -41,8 +41,7 @@ class _BookMarkTabState extends State<BookMarkTab> {
     });
   }
 
-  /// Delete a bookmark and refresh the list
-  void deleteBookmark(int newsId) async {
+  void deleteBookmark(String newsId) async {
     await newsController.removeNews(newsId);
     setState(() {
       _fetchAndSortNews();
@@ -115,19 +114,19 @@ class _BookMarkTabState extends State<BookMarkTab> {
                   key: Key(news.id.toString()),
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
-                    deleteBookmark(news.id!);
+                    deleteBookmark(news.id);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Bookmark removed')),
                     );
                   },
                   background: Container(
                     color: Colors.orange,
-                    child: const Icon(Icons.delete, color: Colors.white, size: 40),
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 20),
+                    child: const Icon(Icons.delete, color: Colors.white, size: 40),
                   ),
                   child: NewsCard(
-                    id: news.id!,
+                    id: news.id,
                     title: news.title,
                     body: news.body,
                     date: news.date,

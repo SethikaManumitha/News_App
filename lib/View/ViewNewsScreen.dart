@@ -3,7 +3,7 @@ import '../Model/News.dart';
 import '../Controller/NewsController.dart';
 
 class ViewNewsScreen extends StatefulWidget {
-  final int id;
+  final String id;
   final String title;
   final String body;
   final String date;

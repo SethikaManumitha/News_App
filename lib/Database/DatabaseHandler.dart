@@ -10,14 +10,14 @@ class DatabaseHandler {
       onCreate: (database, version) async {
         await database.execute(
           '''CREATE TABLE news(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id TEXT PRIMARY KEY,
                 title TEXT NOT NULL,
                 body TEXT NOT NULL,
                 date TEXT NOT NULL,
                 imageUrl TEXT NOT NULL)''',
         );
       },
-      version: 1,
+      version: 2,
     );
   }
 
@@ -33,7 +33,7 @@ class DatabaseHandler {
     return queryResult.map((e) => News.fromMap(e)).toList();
   }
 
-  Future<void> deleteNews(int id) async {
+  Future<void> deleteNews(String id) async {
     final db = await initializeDB();
     await db.delete(
       'news',
