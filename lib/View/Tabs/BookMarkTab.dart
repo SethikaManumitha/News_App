@@ -14,7 +14,7 @@ class _BookMarkTabState extends State<BookMarkTab> {
   final NewsController newsController = NewsController();
   late Future<List<News>> _newsList;
 
-  String _sortCriterion = 'Date';
+  String _sortOption = 'Date';
   bool _isAscending = true;
 
   @override
@@ -23,20 +23,20 @@ class _BookMarkTabState extends State<BookMarkTab> {
     _fetchAndSortNews();
   }
 
-  // Fetch and sort news based on title and date
+  // Sort news based on title and date
   void _fetchAndSortNews() {
     _newsList = newsController.retrieveNews().then((newsList) {
       newsList.sort((a, b) {
-        if (_sortCriterion == 'Date') {
+        if (_sortOption == 'Date') {
           return _isAscending
               ? a.date.compareTo(b.date)
               : b.date.compareTo(a.date);
-        } else if (_sortCriterion == 'Title') {
+        } else if (_sortOption == 'Title') {
           return _isAscending
               ? a.title.compareTo(b.title)
               : b.title.compareTo(a.title);
         }
-        return 0; // Default case
+        return 0;
       });
       return newsList;
     });
@@ -49,9 +49,9 @@ class _BookMarkTabState extends State<BookMarkTab> {
     });
   }
 
-  void _updateSort(String criterion, bool isAscending) {
+  void _updateSort(String option, bool isAscending) {
     setState(() {
-      _sortCriterion = criterion;
+      _sortOption = option;
       _isAscending = isAscending;
       _fetchAndSortNews();
     });
