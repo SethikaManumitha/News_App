@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../Model/News.dart';
 import '../Controller/NewsController.dart';
 import 'ViewNewsScreen.dart';
@@ -27,14 +28,13 @@ class _NewsCardState extends State<NewsCard> {
   final NewsController newsController = NewsController();
   bool isBookmarked = false;
 
-
   @override
   void initState() {
     super.initState();
     checkIfBookmarked();
   }
 
-
+  // Check if it is bookmarked
   void checkIfBookmarked() async {
     List<News> bookmarkedNews = await newsController.retrieveNews();
     setState(() {
@@ -42,6 +42,15 @@ class _NewsCardState extends State<NewsCard> {
     });
   }
 
+  // Format the date
+  String formatDate(String dateString) {
+    try {
+      DateTime dateTime = DateTime.parse(dateString).toLocal();
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+    } catch (e) {
+      return 'Invalid date';
+    }
+  }
 
   void toggleBookmark() async {
     setState(() {
@@ -64,6 +73,8 @@ class _NewsCardState extends State<NewsCard> {
 
   @override
   Widget build(BuildContext context) {
+    final formattedDate = formatDate(widget.date);
+
     return Card(
       elevation: 3,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -77,7 +88,7 @@ class _NewsCardState extends State<NewsCard> {
                 id: widget.id,
                 title: widget.title,
                 body: widget.body,
-                date: widget.date,
+                date: formattedDate,
                 imageUrl: widget.imageUrl,
               ),
             ),
@@ -125,7 +136,7 @@ class _NewsCardState extends State<NewsCard> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    widget.date,
+                    formattedDate,
                     style: TextStyle(color: Colors.grey[600], fontSize: 12),
                   ),
                 ],

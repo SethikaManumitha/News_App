@@ -32,6 +32,7 @@ class _ViewNewsScreenState extends State<ViewNewsScreen> {
     checkIfBookmarked();
   }
 
+  // Check if it is bookmarked
   void checkIfBookmarked() async {
     List<News> bookmarkedNews = await newsController.retrieveNews();
     setState(() {

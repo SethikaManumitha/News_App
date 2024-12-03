@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../NewsCard.dart';
 import '../../Services/ApiService.dart';
 import '../ViewNewsScreen.dart';
-import 'package:intl/intl.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -38,15 +37,6 @@ class _HomeTabState extends State<HomeTab> {
   void initState() {
     super.initState();
     fetchNewsData();
-  }
-
-  String formatDate(String dateString) {
-    try {
-      DateTime dateTime = DateTime.parse(dateString);
-      return DateFormat('dd MMM yyyy, HH:mm').format(dateTime);
-    } catch (e) {
-      return 'Invalid date';
-    }
   }
 
   @override
@@ -154,7 +144,7 @@ class _HomeTabState extends State<HomeTab> {
                     itemCount: latestArticles.length,
                     itemBuilder: (context, index) {
                       final article = latestArticles[index];
-                      final formattedDate = formatDate(article['publishedAt'] ?? '');
+                      final formattedDate = article['publishedAt'] ?? '';
                       final id = 'latest_$index';
                       return NewsCard(
                         id: id,

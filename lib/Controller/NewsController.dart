@@ -4,21 +4,17 @@ import '../Database/DatabaseHandler.dart';
 class NewsController {
   final DatabaseHandler databaseHandler = DatabaseHandler();
 
+  // Insert news into the database
   Future<void> insertNews(News news) async {
     await databaseHandler.insertNews(news);
-    print("News ID: ${news.id}");
-    print("News Title: ${news.title}");
-    print("News Body: ${news.body}");
-    print("News Date: ${news.date}");
-    print("URL: ${news.imageUrl}");
-
   }
 
+  // Remove news form database
   Future<void> removeNews(String id) async {
     await databaseHandler.deleteNews(id);
-    print("News ID: ${id}");
   }
 
+  // Retrieve news
   Future<List<News>> retrieveNews() async {
     return await databaseHandler.retrieveNews();
   }

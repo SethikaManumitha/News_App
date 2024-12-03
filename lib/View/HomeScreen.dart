@@ -16,7 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isSearchVisible = false;
   final TextEditingController _searchController = TextEditingController();
 
-  final List<Widget> _screens = [
+  // List of tabs
+  final List<Widget> _tabs = [
     const HomeTab(),
     const SearchTab(),
     const BookMarkTab(),
@@ -40,6 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Toggle between dark and light mode
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -49,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
           controller: _searchController,
           onChanged: (value) {
             setState(() {
-              _screens[1] = SearchTab(query: value);
+              _tabs[1] = SearchTab(query: value); // Switch to search tab
             });
           },
           autofocus: true,
@@ -78,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
         ],
       ),
-      body: _isSearchVisible ? _screens[1] : _screens[_currentIndex],
+      body: _isSearchVisible ? _tabs[1] : _tabs[_currentIndex], // Switch to search tab
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.orange,
         unselectedItemColor: isDarkMode ? Colors.white : Colors.black54,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import '../../Services/ApiService.dart';
 import '../NewsCard.dart';
 import '../../Model/News.dart';
@@ -18,6 +18,7 @@ class _SearchTabState extends State<SearchTab> {
   bool isLoading = false;
   final ApiService _apiService = ApiService();
 
+  // List of categories
   final List<String> categories = [
     "General",
     "Business",
@@ -38,6 +39,7 @@ class _SearchTabState extends State<SearchTab> {
     }
   }
 
+  // Fetch news by query
   Future<void> fetchNewsByQuery(String query) async {
     setState(() {
       isLoading = true;
@@ -62,7 +64,7 @@ class _SearchTabState extends State<SearchTab> {
         id: 'search${entry.key}',
         title: entry.value['title'] ?? 'No title',
         body: entry.value['description'] ?? 'No description',
-        date: formatDate(entry.value['publishedAt']),
+        date: entry.value['publishedAt'],
         imageUrl: entry.value['urlToImage'] ?? '',
       ))
           .toList();
@@ -70,6 +72,7 @@ class _SearchTabState extends State<SearchTab> {
     });
   }
 
+  // Fetch news by category
   Future<void> fetchNewsByCategory(String category) async {
     setState(() {
       isLoading = true;
@@ -83,17 +86,6 @@ class _SearchTabState extends State<SearchTab> {
       isLoading = false;
     });
   }
-
-  String formatDate(String dateString) {
-    try {
-      DateTime dateTime = DateTime.parse(dateString).toLocal();
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
-    } catch (e) {
-      return 'Invalid date';
-    }
-  }
-
-
 
   @override
   Widget build(BuildContext context) {

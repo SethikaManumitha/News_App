@@ -21,18 +21,20 @@ class DatabaseHandler {
     );
   }
 
+  // Insert news into database
   Future<int> insertNews(News news) async {
     final Database db = await initializeDB();
     return await db.insert('news', news.toMap());
   }
 
-
+  // Retrieve news from database
   Future<List<News>> retrieveNews() async {
     final Database db = await initializeDB();
     final List<Map<String, dynamic>> queryResult = await db.query('news');
     return queryResult.map((e) => News.fromMap(e)).toList();
   }
 
+  // Delete news
   Future<void> deleteNews(String id) async {
     final db = await initializeDB();
     await db.delete(

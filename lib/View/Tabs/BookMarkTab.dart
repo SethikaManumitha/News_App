@@ -23,6 +23,7 @@ class _BookMarkTabState extends State<BookMarkTab> {
     _fetchAndSortNews();
   }
 
+  // Fetch and sort news based on title and date
   void _fetchAndSortNews() {
     _newsList = newsController.retrieveNews().then((newsList) {
       newsList.sort((a, b) {
@@ -110,6 +111,7 @@ class _BookMarkTabState extends State<BookMarkTab> {
               itemBuilder: (context, index) {
                 final news = newsList[index];
 
+                // Remove an article
                 return Dismissible(
                   key: Key(news.id.toString()),
                   direction: DismissDirection.endToStart,
